@@ -13,13 +13,14 @@ import {
   IconButton,
   useTheme,
   ThemeProvider,
-  createTheme
+  createTheme,
+  Tabs,
+  Tab,
+  Paper
 } from '@mui/material'
 import { 
-  Search as SearchIcon,
-  Bolt as BoltIcon,
-  Security as SecurityIcon,
-  Dashboard as DashboardIcon,
+  PrivacyTip as PrivacyTipIcon,
+  DeleteOutline as DeleteOutlineIcon,
   PlayArrow as PlayArrowIcon
 } from '@mui/icons-material'
 
@@ -27,18 +28,18 @@ import {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#9333EA', // purple-600
+      main: '#FFFFFF', // white
     },
     secondary: {
       main: '#3B82F6', // blue-500
     },
     background: {
-      default: '#1E1B4B', // indigo-900
-      paper: 'rgba(255, 255, 255, 0.1)',
+      default: '#FFFFFF', // white
+      paper: '#F8FAFC', // light gray
     },
     text: {
-      primary: '#FFFFFF',
-      secondary: 'rgba(255, 255, 255, 0.7)',
+      primary: '#1F2937', // dark gray
+      secondary: '#6B7280', // medium gray
     },
   },
   typography: {
@@ -80,7 +81,16 @@ const theme = createTheme({
 
 function App() {
   const [scrollPosition, setScrollPosition] = useState(0)
-  const [backgroundColor, setBackgroundColor] = useState('linear-gradient(to bottom right, #1E1B4B, #312E81, #1E40AF)')
+  const [backgroundColor, setBackgroundColor] = useState('linear-gradient(to bottom right, #FFFFFF, #F1F5F9, #E2E8F0)')
+  const [activeTab, setActiveTab] = useState(0)
+
+  const handleTabNavigation = (tabIndex) => {
+    setActiveTab(tabIndex)
+    const element = document.getElementById('policy-tabs')
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,9 +101,9 @@ function App() {
       const scrollPercentage = Math.min(position / 1000, 1) // Cap at 1000px scroll
       
       // Color transitions
-      const startColor = '#1E1B4B' // indigo-900
-      const midColor = '#312E81'   // indigo-800
-      const endColor = '#1E40AF'   // blue-900
+      const startColor = '#FFFFFF' // white
+      const midColor = '#F1F5F9'   // light gray
+      const endColor = '#E2E8F0'   // lighter gray
       
       // Interpolate between colors based on scroll position
       const r1 = parseInt(startColor.slice(1, 3), 16)
@@ -133,7 +143,7 @@ function App() {
       <Box sx={{ 
         minHeight: '100vh',
         background: backgroundColor,
-        color: 'white',
+        color: '#1F2937',
         position: 'relative',
         overflow: 'hidden',
         transition: 'background 0.3s ease-in-out',
@@ -142,27 +152,30 @@ function App() {
           background: 'transparent', 
           boxShadow: 'none',
           backdropFilter: 'blur(10px)',
-          backgroundColor: 'rgba(30, 27, 75, 0.5)',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
           transition: 'all 0.3s ease-in-out',
           zIndex: 1000,
         }}>
           <Container maxWidth="xl">
             <Toolbar sx={{ justifyContent: 'space-between' }}>
-              <Typography variant="h2" component="div" sx={{ fontWeight: 'bold' }}>
-                Prodo Ai 
+              <Typography variant="h2" component="div" sx={{ fontWeight: 'bold', color: '#3B82F6' }}>
+                ShopMe
               </Typography>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 4 }}>
-                <Button color="inherit" href="#features">Features</Button>
-                <Button color="inherit" href="#pricing">Pricing</Button>
-                <Button color="inherit" href="#contact">Contact</Button>
+                <Button sx={{ color: '#1F2937' }} onClick={() => handleTabNavigation(0)}>Privacy Policy</Button>
+                <Button sx={{ color: '#1F2937' }} onClick={() => handleTabNavigation(1)}>Account Deletion</Button>
               </Box>
               <Button 
                 variant="contained" 
-                color="primary"
                 sx={{ 
                   borderRadius: '9999px',
                   px: 4,
                   py: 1,
+                  backgroundColor: '#3B82F6',
+                  color: '#FFFFFF',
+                  '&:hover': {
+                    backgroundColor: '#2563EB',
+                  },
                 }}
               >
                 Get Started
@@ -193,7 +206,7 @@ function App() {
                 lineHeight: 1.2,
                 mb: 2,
               }}>
-                Never second guess your purchases <span style={{ color: '#9046c4', fontFamily: 'Arial, sans-serif', fontWeight: 'bold' }}>again</span>
+                Never second guess your purchases <span style={{ color: '#3B82F6', fontFamily: 'Arial, sans-serif', fontWeight: 'bold' }}>again</span>
               </Typography>
               <Typography variant="h5" color="text.secondary" paragraph sx={{ 
                 fontSize: { xs: '1.25rem', md: '1.5rem' },
@@ -206,10 +219,17 @@ function App() {
               <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', mt: 2 }}>
                 <Button 
                   variant="contained" 
-                  color="primary"
                   size="large"
                   startIcon={<PlayArrowIcon />}
-                  sx={{ px: 6, py: 2 }}
+                  sx={{ 
+                    px: 6, 
+                    py: 2,
+                    backgroundColor: '#3B82F6',
+                    color: '#FFFFFF',
+                    '&:hover': {
+                      backgroundColor: '#2563EB',
+                    },
+                  }}
                 >
                   Free trial coming soon
                 </Button>
@@ -219,127 +239,205 @@ function App() {
           </Container>
         </Box>
 
-        {/* Features Section - Full Viewport */}
-        <Box id="features" sx={{ 
-          height: '100vh',
+        {/* Policy Tabs Section - Full Viewport */}
+        <Box id="policy-tabs" sx={{ 
+          minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
+          py: 8,
         }}>
           <Container maxWidth="xl">
-            <Typography variant="h2" align="center" gutterBottom sx={{ mb: 8, marginTop:"40%" }}>
-              Why Choose Us
+            <Typography variant="h2" align="center" gutterBottom sx={{ mb: 6 }}>
+              Privacy & Account Management
             </Typography>
-            <Grid container spacing={6} sx={{ maxWidth: '1400px', mx: 'auto', display: 'flex', justifyContent: 'center' }}>
-              <Grid item xs={12} md={4}>
-                <Card sx={{height: '50vh',width: '60vh', marginTop:"10vh",  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <CardContent sx={{ 
-                    textAlign: 'center',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    p: 4,
-                  }}>
-                    <IconButton 
-                      color="primary" 
-                      sx={{ 
-                        mb: 4,
-                        width: 80,
-                        height: 80,
-                        backgroundColor: 'primary.dark',
-                        '&:hover': { backgroundColor: 'primary.dark' }
-                      }}
-                    >
-                      <SearchIcon sx={{ fontSize: 40 }} />
-                    </IconButton>
-                    <Typography variant="h3" gutterBottom>
-                      Find the perfect fit
-                    </Typography>
-                    <Typography color="text.secondary" sx={{ fontSize: '1.25rem' }}>
-                      Our product lets you scour the internet for the best product for your circumstances.
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Card sx={{ height: '50vh',width: '60vh', marginBottom:"0%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <CardContent sx={{ 
-                    textAlign: 'center',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    p: 4,
-                  }}>
-                    <IconButton 
-                      color="secondary" 
-                      sx={{ 
-                        mb: 4,
-                        width: 80,
-                        height: 80,
-                        backgroundColor: 'secondary.dark',
-                        '&:hover': { backgroundColor: 'secondary.dark' }
-                      }}
-                    >
-                      <SecurityIcon sx={{ fontSize: 40 }} />
-                    </IconButton>
-                    <Typography variant="h3" gutterBottom>
-                      Secure & Reliable
-                    </Typography>
-                    <Typography color="text.secondary" sx={{ fontSize: '1.25rem' }}>
-                      Your data is protected with enterprise-grade security.
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Card sx={{ height: '50vh',width: '60vh', marginBottom:"10vh",  display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:"5%"}}>
-                  <CardContent sx={{ 
-                    textAlign: 'center',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    p: 4,
-                  }}>
-                    <IconButton 
-                      sx={{ 
-                        mb: 4,
-                        width: 80,
-                        height: 80,
-                        backgroundColor: 'info.main',
-                        '&:hover': { backgroundColor: 'info.dark' }
-                      }}
-                    >
-                      <DashboardIcon sx={{ fontSize: 40 }} />
-                    </IconButton>
-                    <Typography variant="h3" gutterBottom>
-                      Easy to Use
-                    </Typography>
-                    <Typography color="text.secondary" sx={{ fontSize: '1.25rem' }}>
-                      Intuitive interface designed for both beginners and pros.
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
+            
+            <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+              <Tabs 
+                value={activeTab} 
+                onChange={(event, newValue) => setActiveTab(newValue)}
+                sx={{ 
+                  mb: 4,
+                  '& .MuiTab-root': {
+                    color: '#6B7280',
+                    fontSize: '1.2rem',
+                    fontWeight: 600,
+                    minWidth: 200,
+                  },
+                  '& .Mui-selected': {
+                    color: '#3B82F6 !important',
+                  },
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: '#3B82F6',
+                    height: 3,
+                  },
+                }}
+                centered
+              >
+                <Tab 
+                  icon={<PrivacyTipIcon sx={{ fontSize: 28 }} />} 
+                  label="Privacy Policy" 
+                  iconPosition="start"
+                />
+                <Tab 
+                  icon={<DeleteOutlineIcon sx={{ fontSize: 28 }} />} 
+                  label="Account Deletion" 
+                  iconPosition="start"
+                />
+              </Tabs>
+
+              <Card sx={{ 
+                minHeight: '70vh',
+                background: '#FFFFFF',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #E5E7EB',
+              }}>
+                <CardContent sx={{ p: 6 }}>
+                  {activeTab === 0 && (
+                    <Box>
+                      <Typography variant="h3" gutterBottom sx={{ color: '#3B82F6', mb: 3 }}>
+                        Privacy Policy
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8, mb: 3 }}>
+                        <strong>Last updated:</strong> December 2024
+                      </Typography>
+                      
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        1. Information We Collect
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7, mb: 2 }}>
+                        We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support.
+                      </Typography>
+                      <Box component="ul" sx={{ pl: 3, mb: 3 }}>
+                        <Typography component="li" sx={{ mb: 1 }}>Personal information (name, email, phone number)</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>Account credentials and preferences</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>Usage data and analytics</Typography>
+                      </Box>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        2. How We Use Your Information
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7, mb: 2 }}>
+                        We use the information we collect to provide, maintain, and improve our services, process transactions, and communicate with you.
+                      </Typography>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        3. Data Security
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7, mb: 2 }}>
+                        We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.
+                      </Typography>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        4. Your Rights
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7, mb: 2 }}>
+                        You have the right to access, update, or delete your personal information. You may also object to processing or request data portability.
+                      </Typography>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        5. Contact Us
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7 }}>
+                        If you have questions about this privacy policy, please contact us at privacy@prodoai.com
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {activeTab === 1 && (
+                    <Box>
+                      <Typography variant="h3" gutterBottom sx={{ color: '#3B82F6', mb: 3 }}>
+                        Account Deletion
+                      </Typography>
+                      
+                      <Box sx={{ 
+                        background: 'rgba(220, 38, 38, 0.1)', 
+                        border: '1px solid rgba(220, 38, 38, 0.3)', 
+                        borderRadius: 2, 
+                        p: 3, 
+                        mb: 4 
+                      }}>
+                        <Typography variant="h5" gutterBottom sx={{ color: '#EF4444' }}>
+                          ⚠️ Important Warning
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: '#FCA5A5' }}>
+                          Account deletion is permanent and cannot be undone. All your data will be permanently removed from our servers.
+                        </Typography>
+                      </Box>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        What Gets Deleted
+                      </Typography>
+                      <Box component="ul" sx={{ pl: 3, mb: 3 }}>
+                        <Typography component="li" sx={{ mb: 1 }}>Your profile information and personal details</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>All account settings and preferences</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>Your usage history and activity logs</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>Any content you've created or uploaded</Typography>
+                        <Typography component="li" sx={{ mb: 1 }}>Communication history within the app</Typography>
+                      </Box>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        How to Delete Your Account
+                      </Typography>
+                      <Box sx={{ mb: 3 }}>
+                        <Typography variant="h6" gutterBottom sx={{ color: '#3B82F6' }}>
+                          Method 1: Through Your Account Settings
+                        </Typography>
+                        <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7 }}>
+                          1. Log into your Prodo AI account<br/>
+                          2. Go to Account Settings<br/>
+                          3. Find "Account Management" section<br/>
+                          4. Click "Delete Account"<br/>
+                          5. Confirm your identity<br/>
+                          6. Review and confirm deletion
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ mb: 3 }}>
+                        <Typography variant="h6" gutterBottom sx={{ color: '#3B82F6' }}>
+                          Method 2: Email Request
+                        </Typography>
+                        <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7 }}>
+                          Send an email to <strong>support@prodoai.com</strong> with the subject "Account Deletion Request" and include:
+                        </Typography>
+                        <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+                          <Typography component="li" sx={{ mb: 1 }}>Your registered email address</Typography>
+                          <Typography component="li" sx={{ mb: 1 }}>Your full name</Typography>
+                          <Typography component="li" sx={{ mb: 1 }}>Confirmation that you understand this is permanent</Typography>
+                        </Box>
+                      </Box>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        Data Retention
+                      </Typography>
+                      <Typography variant="body1" paragraph sx={{ fontSize: '1rem', lineHeight: 1.7 }}>
+                        Most data is deleted immediately. Some information may be retained for legal compliance (up to 7 years for financial records, 2 years for security logs).
+                      </Typography>
+
+                      <Typography variant="h4" gutterBottom sx={{ mt: 4, mb: 2, color: '#3B82F6' }}>
+                        Need Help?
+                      </Typography>
+                      <Typography variant="body1" sx={{ fontSize: '1rem', lineHeight: 1.7 }}>
+                        Contact our support team at <strong>support@prodoai.com</strong> or use the live chat feature in your account.
+                      </Typography>
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Box>
           </Container>
         </Box>
 
         {/* CTA Section - Full Viewport */}
         <Box sx={{ 
-          marginTop: '70%',
+          marginTop: '0',
           height: '20vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(8px)',
+          background: '#F8FAFC',
+          border: '1px solid #E5E7EB',
         }}>
           <Container maxWidth="xl">
             <Box sx={{ 
@@ -358,12 +456,16 @@ function App() {
               </Typography>
               <Button 
                 variant="contained" 
-                color="primary"
                 size="large"
                 sx={{ 
                   px: 8,
                   py: 2,
                   fontSize: '1.25rem',
+                  backgroundColor: '#3B82F6',
+                  color: '#FFFFFF',
+                  '&:hover': {
+                    backgroundColor: '#2563EB',
+                  },
                 }}
               >
                 Free trial coming soon
@@ -375,7 +477,7 @@ function App() {
         {/* Footer */}
         <Box sx={{ 
           py: 6,
-          background: 'rgba(0, 0, 0, 0.2)',
+          background: '#1F2937',
         }}>
           <Container maxWidth="xl">
             <Box sx={{ 
@@ -385,13 +487,12 @@ function App() {
               alignItems: 'center',
               gap: 4
             }}>
-              <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
-                Prodo Ai
+              <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', color: '#FFFFFF' }}>
+                ShopMe
               </Typography>
               <Box sx={{ display: 'flex', gap: 4 }}>
-                <Button color="inherit">Privacy</Button>
-                <Button color="inherit">Terms</Button>
-                <Button color="inherit">Contact</Button>
+                <Button sx={{ color: '#FFFFFF' }} onClick={() => handleTabNavigation(0)}>Privacy Policy</Button>
+                <Button sx={{ color: '#FFFFFF' }} onClick={() => handleTabNavigation(1)}>Account Deletion</Button>
               </Box>
             </Box>
           </Container>
